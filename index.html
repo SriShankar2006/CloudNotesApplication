@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cloud Notes App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  /* Full background image - aligned to match screenshot */
+  body {
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    background: url('background.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    transition: filter 0.6s, background 0.6s;
+  }
+
+  /* Dark overlay when notes are visible */
+  body.notes-active::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    backdrop-filter: blur(10px);
+    background: rgba(0,0,0,0.4);
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1; /* Keep in front of overlay */
+    background: rgba(255,255,255,0.92); /* Slightly transparent as requested */
+    width: 460px;
+    padding: 25px 35px;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    transition: transform 0.5s, opacity 0.5s;
+    backdrop-filter: blur(10px); /* Adds subtle glass effect for better integration */
+    margin-bottom: 40px;
+  }
+
+  h2 { text-align: center; margin-bottom: 15px; color: #333; }
+
+  input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.3s;
+    background: #f9f9f9;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #6a11cb;
+    box-shadow: 0 0 6px rgba(106,17,203,0.4);
+    background: #fff;
+  }
+
+  textarea { resize: none; height: 80px; }
+
+  button {
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 8px;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  #signUpBtn { background: linear-gradient(45deg, #d2cdd2, #eb0d2a); }
+  #signUpBtn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(245,87,108,0.4); }
+
+  #signInBtn { background: linear-gradient(45deg, #d0e7d8, #0290fd); }
+  #signInBtn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(56,249,215,0.4); }
+
+  #addNoteBtn { background: linear-gradient(45deg, #f5030b, #fad0c4); }
+  #addNoteBtn:hover { transform: translateY(-2px); }
+
+  #loadNotesBtn { background: linear-gradient(45deg, #0062ff, #c2e9fb); }
+  #loadNotesBtn:hover { transform: translateY(-2px); }
+
+  #backBtn { background: linear-gradient(45deg, #ffecd2, #fc3f00); margin-top: 12px; }
+  #backBtn:hover { transform: translateY(-2px); }
+
+  hr { margin: 15px 0; border: 0; border-top: 1px solid #ddd; }
+
+  ul { list-style: none; padding: 0; }
+
+  li {
+    background: linear-gradient(120deg, #fdfbfb, #ebedee);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s, transform 0.5s, background 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  li.active { background: linear-gradient(120deg, #ffeaa7, #fab1a0); }
+
+  .actions button {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 12px;
+    margin-right: 6px;
+    border-radius: 6px;
+  }
+
+  .actions button:first-child { background: #f6d365; color: #333; }
+  .actions button:last-child { background: #ff6b6b; color: white; }
+
+  .actions button:hover { transform: translateY(-2px); }
+
+  a { font-size: 13px; color: #6a11cb; display: block; margin-top: 6px; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hidden { display: none; }
+  .fade-in { opacity: 1 !important; transform: translateX(0) !important; }
+
+  .user-info { text-align: center; font-size: 14px; color: #444; margin-bottom: 12px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>☁️ Cloud Notes App</h2>
+
+  <!-- AUTH SECTION -->
+  <div id="authSection">
+    <div class="user-info" id="userInfo"></div>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="signUpBtn">Sign Up</button>
+    <button id="signInBtn">Sign In</button>
+  </div>
+
+  <!-- NOTES SECTION -->
+  <div id="notesSection" class="hidden">
+    <div class="user-info" id="notesUserInfo"></div>
+    <textarea id="noteText" placeholder="Write your note..."></textarea>
+    <input type="file" id="fileInput">
+    <button id="addNoteBtn">Add Note</button>
+    <button id="loadNotesBtn">Load Notes</button>
+    <ul id="notesList"></ul>
+    <button id="backBtn">⬅ Back / Sign Out</button>
+  </div>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
